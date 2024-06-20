@@ -14,16 +14,30 @@ const api = axios.create({
 const mock = new MockAdapter(api);
 
 // 模拟登录请求
-mock.onPost('/login').reply(200, {
-  token: 'mock-token'
+mock.onPost('/login').reply(config => {
+  const { email, password } = JSON.parse(config.data);
+  if (email === 'test@a.com' && password === 'test') {
+    return [200, { token: 'mock-token' }];
+  } else {
+    return [401, { errors: { email: 'Invalid email or password' } }];
+  }
 });
 
 // 模拟注册请求
-mock.onPost('/register').reply(200, {
-  message: '注册成功'
+mock.onPost('/register').reply(config => {
+  const { username, email, password } = JSON.parse(config.data);
+  if (email !== 'test@a.com') {
+    const response = { message: '注册成功' };
+    response.username = username;
+    response.password = password;
+    return [200, response];
+  } else {
+    return [400, { errors: { email: 'Email already in use' } }];
+  }
 });
 
 export default api;
+
 
 // import axios from 'axios';
 //
