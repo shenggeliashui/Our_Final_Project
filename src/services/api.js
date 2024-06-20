@@ -16,7 +16,7 @@ const mock = new MockAdapter(api);
 // 模拟登录请求
 mock.onPost('/login').reply(config => {
   const { email, password } = JSON.parse(config.data);
-  if (email === 'test@a.com' && password === 'test') {
+  if (email === 'test@a.com' && password === 'test.com') {
     return [200, { token: 'mock-token' }];
   } else {
     return [401, { errors: { email: 'Invalid email or password' } }];
