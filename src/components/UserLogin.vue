@@ -3,37 +3,61 @@
     <h2>登录</h2>
     <form @submit.prevent="handleLogin">
       <div class="form-group">
-        <label for="username">用户名:</label>
-        <input type="text" v-model="username" id="username" required />
+        <label for="email">电子邮件:</label>
+        <input type="email" v-model="email" id="email" required />
+        <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
       </div>
       <div class="form-group">
         <label for="password">密码:</label>
         <input type="password" v-model="password" id="password" required />
+        <span v-if="errors.password" class="error-message">{{ errors.password }}</span>
       </div>
       <button type="submit">登录</button>
+      <p>还没有账号？<router-link to="/register">注册</router-link></p>
     </form>
   </div>
 </template>
 
 <script>
+import api from '../services/api';
+
 export default {
+  name: 'UserLogin',
   data() {
     return {
-      username: '',
-      password: ''
+      email: '',
+      password: '',
+      errors: {}
     };
   },
   methods: {
-    handleLogin() {
-      // 在这里处理登录逻辑，比如发送请求到服务器验证用户
-      console.log('Username:', this.username);
-      console.log('Password:', this.password);
-      // 假设登录成功，重定向到主页面
-      this.$router.push('/home');
+    async handleLogin() {
+      try {
+        const response = await api.post('/login', {
+          email: this.email,
+          password: this.password
+        });
+
+        console.log('登录成功:', response.data);
+        // 假设后端返回的是 JWT 或其他会话令牌
+        const token = response.data.token;
+        // 存储令牌，比如存储在 localStorage 中
+        localStorage.setItem('token', token);
+        // 登录成功后重定向到主页
+        this.$router.push('/home');
+      } catch (error) {
+        console.error('登录失败:', error.response.data);
+        // 处理后端返回的错误信息
+        if (error.response.data.errors) {
+          this.errors = error.response.data.errors;
+        }
+      }
     }
   }
 };
 </script>
+
+
 
 <style scoped>
 .login-container {
@@ -63,7 +87,7 @@ form input {
 button {
   width: 100%;
   padding: 10px;
-  background-color: #42b983;
+  background-color: lightsalmon;
   color: white;
   border: none;
   border-radius: 4px;
@@ -71,6 +95,16 @@ button {
 }
 
 button:hover {
-  background-color: #38a173;
+  background-color: coral;
+}
+
+p {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
 }
 </style>
