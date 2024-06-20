@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>欢迎来到背单词App</h1>
+    <h1>欢迎来到App</h1>
+    <p><router-link to="/profile">个人中心</router-link></p>
   </div>
 </template>
 

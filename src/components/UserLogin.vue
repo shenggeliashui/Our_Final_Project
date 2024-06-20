@@ -3,10 +3,15 @@
     <h2>登录</h2>
     <form @submit.prevent="handleLogin">
       <div class="form-group">
-        <label for="email">电子邮件:</label>
-        <input type="email" v-model="email" id="email" required />
-        <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
+        <label for="username">用户名:</label>
+        <input type="text" v-model="username" id="username"  required />
+        <span v-if="errors.username" class="error-message">{{ errors.username }}</span>
       </div>
+<!--      <div class="form-group">-->
+<!--        <label for="email">电子邮件:</label>-->
+<!--        <input type="email" v-model="email" id="email" required />-->
+<!--        <span v-if="errors.email" class="error-message">{{ errors.email }}</span>-->
+<!--      </div>-->
       <div class="form-group">
         <label for="password">密码:</label>
         <input type="password" v-model="password" id="password" required />
@@ -25,7 +30,7 @@ export default {
   name: 'UserLogin',
   data() {
     return {
-      email: '',
+      username: '',
       password: '',
       errors: {}
     };
@@ -34,7 +39,7 @@ export default {
     async handleLogin() {
       try {
         const response = await api.post('/login', {
-          email: this.email,
+          username: this.username,
           password: this.password
         });
 

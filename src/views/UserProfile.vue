@@ -1,26 +1,31 @@
 <template>
   <div class="user-profile">
-    <h2>个人中心</h2>
-    <div class="profile-section">
-      <label for="nickname">用户昵称:</label>
-      <input type="text" id="nickname" v-model="nickname" @blur="updateNickname" />
+    <div class="left-column">
+<!--      <img :src="user.avatar" alt="头像" class="avatar" />-->
+      <img :src="avatarUrl" alt="用户的头像" class="avatar" />
+      <div class="user-info">
+        <p><strong>昵称:</strong> {{ user.nickname }}</p>
+        <p><strong>性别:</strong> {{ user.gender }}</p>
+        <p><strong>生日:</strong> {{ user.birthday }}</p>
+        <p><strong>注册日期:</strong> {{ user.registrationDate }}</p>
+      </div>
     </div>
-    <div class="profile-section">
-      <label for="avatar">用户头像:</label>
-      <input type="file" id="avatar" @change="onAvatarChange" />
-      <img :src="avatar" alt="用户头像" v-if="avatar" />
+    <div class="center-column">
+      <div class="notification">
+        <h3>官方消息通知</h3>
+        <ul>
+          <li v-for="message in notifications" :key="message.id">{{ message.text }}</li>
+        </ul>
+      </div>
+      <div class="study-progress">
+        <h3>词库学习进度</h3>
+        <ul>
+          <li v-for="wordList in studyProgress" :key="wordList.id">{{ wordList.name }}: {{ wordList.progress }}%</li>
+        </ul>
+      </div>
     </div>
-    <div class="profile-section">
-      <button @click="showCurrentWordList">当前词库</button>
-      <button @click="changeWordList">修改词库</button>
-    </div>
-    <div class="profile-section">
-      <h3>背书日历</h3>
-      <ul>
-        <li v-for="entry in studyCalendar" :key="entry.date">
-          {{ entry.date }}: {{ entry.completed ? '完成' : '未完成' }}
-        </li>
-      </ul>
+    <div class="right-column">
+      <Calendar />
     </div>
   </div>
 </template>
@@ -28,50 +33,28 @@
 <script>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import Calendar from '../components/Calendar.vue';
 
 export default {
   name: 'UserProfile',
+  components: {
+    Calendar
+  },
   setup() {
     const store = useStore();
+    const user = computed(() => store.state.user);
+    const notifications = computed(() => store.state.notifications);
+    const studyProgress = computed(() => store.state.studyProgress);
 
-    const nickname = computed({
-      get: () => store.state.user.nickname,
-      set: value => store.dispatch('updateNickname', value)
+    const avatarUrl = computed(() => {
+      // 使用 import 语句来处理 Webpack 静态资源
+      return require(`../assets/${user.value.avatar}`);
     });
-
-    const avatar = computed(() => store.state.user.avatar);
-
-    const onAvatarChange = event => {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          store.dispatch('updateAvatar', e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-
-    const showCurrentWordList = () => {
-      alert(`当前词库: ${store.state.wordList}`);
-    };
-
-    const changeWordList = () => {
-      const newWordList = prompt('请输入新的词库名:');
-      if (newWordList) {
-        store.dispatch('updateWordList', newWordList);
-      }
-    };
-
-    const studyCalendar = computed(() => store.state.studyCalendar);
-
     return {
-      nickname,
-      avatar,
-      onAvatarChange,
-      showCurrentWordList,
-      changeWordList,
-      studyCalendar
+      user,
+      notifications,
+      studyProgress,
+      avatarUrl
     };
   }
 };
@@ -79,47 +62,60 @@ export default {
 
 <style scoped>
 .user-profile {
-  max-width: 600px;
-  margin: 50px auto;
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  gap: 20px;
+}
+
+.left-column, .center-column, .right-column {
+  background-color: #f9f9f9;
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.profile-section {
+.left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
   margin-bottom: 20px;
 }
 
-.profile-section label {
-  display: block;
-  margin-bottom: 5px;
+.user-info p {
+  margin: 10px 0;
 }
 
-.profile-section input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
+.center-column {
+  flex: 2;
 }
 
-.profile-section img {
-  display: block;
-  margin-top: 10px;
-  max-width: 100px;
-  border-radius: 50%;
+.notification, .study-progress {
+  margin-bottom: 20px;
 }
 
-.profile-section button {
-  padding: 10px 15px;
-  margin-right: 10px;
-  background-color: lightsalmon;
-  color: white;
-  border: none;
+.notification ul, .study-progress ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.notification li, .study-progress li {
+  background: #fff;
+  margin-bottom: 10px;
+  padding: 10px;
   border-radius: 4px;
-  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.profile-section button:hover {
-  background-color: coral;
+.right-column {
+  flex: 2;
 }
 </style>

@@ -1,40 +1,28 @@
-// src/store/index.js
 import { createStore } from 'vuex';
 
 const store = createStore({
   state: {
     user: {
-      nickname: '默认昵称',
-      avatar: '默认头像URL'
+      avatar: 'cloud.jpg',
+      nickname: '小灯',
+      gender: '女',
+      birthday: '1990-01-01',
+      registrationDate: '2020-01-01'
     },
-    wordList: '默认词库',
-    studyCalendar: [
-      // 示例数据
-      { date: '2023-06-01', completed: true },
-      { date: '2023-06-02', completed: false }
+    notifications: [
+      { id: 1, text: '欢迎使用我们的应用！' },
+      { id: 2, text: '新版本已经上线，快来体验吧！' }
+    ],
+    studyProgress: [
+      { id: 1, name: '词库1', progress: 50 },
+      { id: 2, name: '词库2', progress: 75 }
     ]
   },
   mutations: {
-    SET_NICKNAME(state, nickname) {
-      state.user.nickname = nickname;
-    },
-    SET_AVATAR(state, avatar) {
-      state.user.avatar = avatar;
-    },
-    SET_WORD_LIST(state, wordList) {
-      state.wordList = wordList;
-    }
+    // mutation methods
   },
   actions: {
-    updateNickname({ commit }, nickname) {
-      commit('SET_NICKNAME', nickname);
-    },
-    updateAvatar({ commit }, avatar) {
-      commit('SET_AVATAR', avatar);
-    },
-    updateWordList({ commit }, wordList) {
-      commit('SET_WORD_LIST', wordList);
-    }
+    // action methods
   }
 });
 
