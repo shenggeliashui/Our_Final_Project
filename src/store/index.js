@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import axios from 'axios';
 
 const store = createStore({
   state: {
@@ -19,17 +20,19 @@ const store = createStore({
     ]
   },
   mutations: {
-    updateUser(state, payload) {
-      state.user = { ...state.user, ...payload };
+    setUser(state, user) {
+      state.user = user;
     }
   },
   actions: {
-    async saveUserProfile({ commit }, userProfile) {
+    async saveUserProfile({ commit }, user) {
       try {
-        const response = await axios.post('/api/updateUserProfile', userProfile);
-        commit('updateUser', response.data);
+        // 假设你的后端 API 端点是 /api/saveProfile
+        const response = await axios.post('/api/saveProfile', user);
+        commit('setUser', response.data);
       } catch (error) {
-        console.error('Failed to save user profile:', error);
+        console.error('Error saving user profile:', error);
+        throw error;
       }
     }
   }

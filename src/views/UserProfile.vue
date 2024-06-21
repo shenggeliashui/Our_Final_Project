@@ -4,10 +4,30 @@
 <!--      <img :src="user.avatar" alt="头像" class="avatar" />-->
       <img :src="avatarUrl" alt="用户的头像" class="avatar" />
       <div class="user-info">
-        <p><strong>昵称:</strong> {{ user.nickname }}</p>
-        <p><strong>性别:</strong> {{ user.gender }}</p>
-        <p><strong>生日:</strong> {{ user.birthday }}</p>
-        <p><strong>注册日期:</strong> {{ user.registrationDate }}</p>
+        <div>
+          <label><strong>头像:</strong></label>
+          <input type="file" @change="onFileChange" />
+        </div>
+        <div>
+          <label><strong>昵称:</strong></label>
+          <input v-model="editableUser.nickname" />
+        </div>
+        <div>
+          <label><strong>性别:</strong></label>
+          <select v-model="editableUser.gender">
+            <option value="男">男</option>
+            <option value="女">女</option>
+          </select>
+        </div>
+        <div>
+          <label><strong>生日:</strong></label>
+          <input type="date" v-model="editableUser.birthday" />
+        </div>
+        <div>
+          <label><strong>注册日期:</strong></label>
+          <input type="date" v-model="editableUser.registrationDate" disabled />
+        </div>
+        <button @click="saveProfile">保存</button>
       </div>
     </div>
     <div class="center-column">
@@ -31,9 +51,11 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed,ref } from 'vue';
 import { useStore } from 'vuex';
 import Calendar from '../components/Calendar.vue';
+import axios from "axios";
+
 
 export default {
   name: 'UserProfile',
@@ -42,19 +64,64 @@ export default {
   },
   setup() {
     const store = useStore();
-    const user = computed(() => store.state.user);
+    const user = ref({ ...store.state.user });
+    const editableUser = ref({ ...user.value });
     const notifications = computed(() => store.state.notifications);
     const studyProgress = computed(() => store.state.studyProgress);
 
     const avatarUrl = computed(() => {
       // 使用 import 语句来处理 Webpack 静态资源
-      return require(`../assets/${user.value.avatar}`);
+      return require(`../assets/${editableUser.value.avatar}`);
     });
+    // const avatarUrl = computed(() => {
+    //   return `/uploads/${editableUser.value.avatar}`;
+    // });
+    // const avatarUrl = computed(() => {
+    //   return new URL(`../assets/${editableUser.value.avatar}`, import.meta.url).href;
+    // });
+    const saveProfile = async () => {
+      try {
+        await store.dispatch('saveUserProfile', editableUser.value);
+        // Update the user in the store after successful save
+        user.value = { ...editableUser.value };
+      } catch (error) {
+        console.error('Error saving profile:', error);
+      }
+    };
+    // const onFileChange = (e) => {
+    //   const file = e.target.files[0];
+    //   if (file) {
+    //     const reader = new FileReader();
+    //     reader.onload = (event) => {
+    //       user.value.avatar = event.target.result; // Base64 URL
+    //     };
+    //     reader.readAsDataURL(file);
+    //   }
+    // };
+    const onFileChange = async (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('avatar', file);
+        try {
+          const response = await axios.post('/api/uploadAvatar', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          user.value.avatar = response.data.avatar;
+        } catch (error) {
+          console.error('Error uploading avatar:', error);
+        }
+      }
+    };
     return {
-      user,
+      editableUser,
       notifications,
       studyProgress,
-      avatarUrl
+      avatarUrl,
+      saveProfile,
+      onFileChange
     };
   }
 };
