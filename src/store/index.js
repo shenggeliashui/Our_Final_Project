@@ -19,10 +19,19 @@ const store = createStore({
     ]
   },
   mutations: {
-    // mutation methods
+    updateUser(state, payload) {
+      state.user = { ...state.user, ...payload };
+    }
   },
   actions: {
-    // action methods
+    async saveUserProfile({ commit }, userProfile) {
+      try {
+        const response = await axios.post('/api/updateUserProfile', userProfile);
+        commit('updateUser', response.data);
+      } catch (error) {
+        console.error('Failed to save user profile:', error);
+      }
+    }
   }
 });
 
