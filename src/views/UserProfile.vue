@@ -42,6 +42,16 @@
         <ul>
           <li v-for="wordList in studyProgress" :key="wordList.id">{{ wordList.name }}: {{ wordList.progress }}%</li>
         </ul>
+        <div class="change-wordlist">
+          <label for="wordlist-select">更换词库:</label>
+          <select id="wordlist-select" v-model="selectedWordListId">
+            <option v-for="list in wordLists" :key="list.id" :value="list.id">
+              {{ list.name }}<span v-if="list.id === currentWordList.id"> </span>
+            </option>
+          </select>
+          <button @click="changeWordList">确认更换</button>
+          <p><strong>当前词库:</strong> {{ currentWordList.name }}</p>
+        </div>
       </div>
     </div>
     <div class="right-column">
@@ -68,6 +78,10 @@ export default {
     const editableUser = ref({ ...user.value });
     const notifications = computed(() => store.state.notifications);
     const studyProgress = computed(() => store.state.studyProgress);
+    const wordLists = computed(() => store.state.wordLists);
+    // const selectedWordList = ref(store.state.currentWordList);
+    const selectedWordListId = ref(store.state.currentWordList.id);
+    const currentWordList = computed(() => store.getters.currentWordList);
 
     const avatarUrl = computed(() => {
       // 使用 import 语句来处理 Webpack 静态资源
@@ -98,6 +112,20 @@ export default {
     //     reader.readAsDataURL(file);
     //   }
     // };
+    // const changeWordList = async () => {
+    //   try {
+    //     await store.dispatch('changeWordList', selectedWordList.value);
+    //   } catch (error) {
+    //     console.error('更换词库失败:', error);
+    //   }
+    // };
+    const changeWordList = async () => {
+      try {
+        await store.dispatch('changeWordList', selectedWordListId.value);
+      } catch (error) {
+        console.error('更换词库失败:', error);
+      }
+    };
     const onFileChange = async (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -115,12 +143,18 @@ export default {
         }
       }
     };
+
+
     return {
       editableUser,
       notifications,
       studyProgress,
+      wordLists,
+      selectedWordListId,
+      currentWordList,
       avatarUrl,
       saveProfile,
+      changeWordList,
       onFileChange
     };
   }
@@ -180,6 +214,10 @@ export default {
   padding: 10px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.change-wordlist {
+  margin-top: 20px;
 }
 
 .right-column {
