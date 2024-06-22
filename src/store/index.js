@@ -15,13 +15,23 @@ const store = createStore({
       { id: 2, text: '新版本已经上线，快来体验吧！' }
     ],
     studyProgress: [
-      { id: 1, name: '词库1', progress: 50 },
-      { id: 2, name: '词库2', progress: 75 }
+      { id: 1, name: '词库1', progress: 75 },
+      { id: 2, name: '词库2', progress: 50 },
+      { id: 3, name: '词库3', progress: 30 }
+    ],
+    currentWordList: { id: 1, name: '词库1' }, // 当前词库 ID
+    wordLists: [
+      { id: 1, name: '词库1' },
+      { id: 2, name: '词库2' },
+      { id: 3, name: '词库3' }
     ]
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
+    },
+    setCurrentWordList(state, wordListId) {
+      state.currentWordList = wordListId;
     }
   },
   actions: {
@@ -34,7 +44,21 @@ const store = createStore({
         console.error('Error saving user profile:', error);
         throw error;
       }
+    },
+    async changeWordList({ commit, state }, wordListId) {
+      const selectedWordList = state.wordLists.find(list => list.id === wordListId);
+      if (selectedWordList) {
+        commit('setCurrentWordList', selectedWordList);
+      }
     }
+  },
+  // getters: {
+  //   currentWordList(state) {
+  //     return state.wordLists.find(list => list.id === state.currentWordList);
+  //   }
+  // },
+   getters: {
+    currentWordList: (state) => state.currentWordList
   }
 });
 
