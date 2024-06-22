@@ -1,4 +1,3 @@
-// src/services/api.js
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
@@ -36,18 +35,55 @@ mock.onPost('/register').reply(config => {
   }
 });
 
+// 模拟获取用户信息的请求
+mock.onGet('/user/profile').reply(config => {
+  const token = config.headers.Authorization;
+  if (token === 'Bearer mock-token') {
+    const user = {
+      avatar: 'cloud.jpg',
+      nickname: '小阿灯',
+      gender: '女',
+      birthday: '1990-01-01',
+      registrationDate: '2020-01-01'
+    };
+    return [200, user];
+  } else {
+    return [401, { error: 'Unauthorized' }];
+  }
+});
+
+// 模拟保存用户信息的请求
+mock.onPost('/api/saveProfile').reply(config => {
+  const user = JSON.parse(config.data);
+  return [200, user]; // 返回修改后的用户信息
+});
+
+// 模拟上传头像的请求
+mock.onPost('/api/uploadAvatar').reply(() => {
+  const avatar = 'new-avatar.jpg'; // 模拟上传后的新头像
+  return [200, { avatar }];
+});
+
+// 模拟获取用户词库学习进度的请求
+mock.onGet('/user/studyProgress').reply(config => {
+  const token = config.headers.Authorization;
+  if (token === 'Bearer mock-token') {
+    const studyProgress = [
+      { id: 1, name: '词库1', progress: 50 },
+      { id: 2, name: '词库2', progress: 7 },
+      { id: 3, name: '词库3', progress: 10 }
+    ];
+    return [200, studyProgress];
+  } else {
+    return [401, { error: 'Unauthorized' }];
+  }
+});
+
+// 模拟更换词库的请求
+mock.onPost('/api/changeWordList').reply(config => {
+  const { wordListId } = JSON.parse(config.data);
+  // 模拟更换词库的成功响应
+  return [200, { success: true, wordListId }];
+});
+
 export default api;
-
-
-// import axios from 'axios';
-//
-// // 创建一个 Axios 实例
-// const api = axios.create({
-//   baseURL: 'http://your-api-url.com', // 替换为你的后端服务器 URL
-//   timeout: 10000, // 请求超时时间
-//   headers: {
-//     'Content-Type': 'application/json'
-//   }
-// });
-//
-// export default api;

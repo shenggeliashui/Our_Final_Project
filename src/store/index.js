@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../services/api';
 
 const store = createStore({
   state: {
@@ -19,7 +20,7 @@ const store = createStore({
       { id: 2, name: '词库2', progress: 50 },
       { id: 3, name: '词库3', progress: 30 }
     ],
-    currentWordList: { id: 1, name: '词库1' }, // 当前词库 ID
+    currentWordList: { id: 2, name: '词库2' }, // 当前词库 ID
     wordLists: [
       { id: 1, name: '词库1' },
       { id: 2, name: '词库2' },
@@ -30,6 +31,9 @@ const store = createStore({
     setUser(state, user) {
       state.user = user;
     },
+    setStudyProgress(state, progress) {
+      state.studyProgress = progress;
+    },
     setCurrentWordList(state, wordListId) {
       state.currentWordList = wordListId;
     }
@@ -38,7 +42,8 @@ const store = createStore({
     async saveUserProfile({ commit }, user) {
       try {
         // 假设你的后端 API 端点是 /api/saveProfile
-        const response = await axios.post('/api/saveProfile', user);
+        // const response = await axios.post('/api/saveProfile', user);
+        const response = await api.post('/api/saveProfile', user);
         commit('setUser', response.data);
       } catch (error) {
         console.error('Error saving user profile:', error);
@@ -49,6 +54,19 @@ const store = createStore({
       const selectedWordList = state.wordLists.find(list => list.id === wordListId);
       if (selectedWordList) {
         commit('setCurrentWordList', selectedWordList);
+      }
+    },
+    async fetchUserProfile({ commit }) {
+      try {
+        // const response = await axios.get('/api/user/profile', {
+        const response = await api.get('/user/profile',{
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        commit('setUser', response.data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
       }
     }
   },

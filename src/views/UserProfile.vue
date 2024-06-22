@@ -62,9 +62,10 @@
 
 <script>
 import { computed,ref,onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { useStore} from 'vuex';
 import Calendar from '../components/Calendar.vue';
-import axios from "axios";
+// import axios from "axios";
+import api from '../services/api';
 
 
 export default {
@@ -94,6 +95,23 @@ export default {
     // const avatarUrl = computed(() => {
     //   return new URL(`../assets/${editableUser.value.avatar}`, import.meta.url).href;
     // });
+    const fetchStudyProgress = async () => {
+      try {
+        const response = await api.get('/user/studyProgress', {
+          headers: {
+            Authorization: `Bearer mock-token`
+          }
+        });
+        // studyProgress.value = response.data;
+         store.commit('setStudyProgress', response.data);
+      } catch (error) {
+        console.error('Error fetching study progress:', error);
+      }
+    };
+    // onMounted(fetchStudyProgress);
+    onMounted(() => {
+      fetchStudyProgress();
+    });
     const saveProfile = async () => {
       try {
         await store.dispatch('saveUserProfile', editableUser.value);
@@ -116,7 +134,8 @@ export default {
         const formData = new FormData();
         formData.append('avatar', file);
         try {
-          const response = await axios.post('/api/uploadAvatar', formData, {
+          // const response = await axios.post('/api/uploadAvatar', formData, {
+          const response = await api.post('/api/uploadAvatar', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -143,6 +162,26 @@ export default {
     const stopEditingNickname = () => {
       editingNickname.value = false;
     };
+
+    // onMounted(async () => {
+    //   await store.dispatch('fetchUserProfile');
+    //   user.value = { ...store.state.user };
+    //   editableUser.value = { ...user.value };
+    // });
+     onMounted(async () => {
+      // Fetch user data when component is mounted
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const response = await api.get('/user/profile', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          editableUser.value = response.data;
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    });
 
     return {
       editableUser,
