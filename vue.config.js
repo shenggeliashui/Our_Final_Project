@@ -13,6 +13,21 @@ module.exports = {
         {
           test: /\.vue$/,
           loader: 'vue-loader'
+        },
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: [
+                'transform-vue-jsx',
+                '@babel/plugin-transform-runtime',
+                '@babel/plugin-proposal-class-properties',
+                '@babel/plugin-proposal-object-rest-spread'
+                // 其他插件
+            ]
+          }
         }
       ]
     }

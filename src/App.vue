@@ -1,13 +1,27 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <PageHeader :userAvatarSrc="userAvatarSrcProp" :userName="'John Doe'"  :logoSrc="logoSrcProp" />
+    <div class="container">
+      <div class="box">
+      </div>
+    </div>
     <router-view/>
   </div>
 </template>
 
 <script>
+import PageHeader from './components/site_header.vue'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    PageHeader
+  },
+  data () {
+    return {
+      userAvatarSrcProp: require('@/assets/photo1.png'),
+      logoSrcProp: require('@/assets/logo1.png') // 使用 require 导入图片路径
+    }
+  }
 }
 </script>
 
@@ -18,6 +32,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0px;
+  padding:0px;
+  border: radius 5px;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="calendar">
     <div class="header">
       <button @click="prevMonth">&lt;</button>
-      <h2>{{ monthNames[currentMonth] }} {{ currentYear }}</h2>
+      <h3>{{ monthNames[currentMonth] }} {{ currentYear }}</h3>
       <button @click="nextMonth">&gt;</button>
     </div>
     <div class="weekdays">
@@ -13,6 +13,7 @@
         v-for="(day, index) in days"
         :key="index"
         class="day div"
+        v-b-tooltip.hover.html="{ title: day.date ? `背词数量: ${day.words}` : '', customClass: 'tooltip-custom' }"
         :class="{
           today: isToday(day),
           checked: !day.checked,
@@ -34,8 +35,20 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import VTooltip from 'v-tooltip'
+// eslint-disable-next-line no-unused-vars
+import { createApp } from 'vue'
+// import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { VBTooltip } from 'bootstrap-vue'
+// import axios from 'axios'
 export default {
   name: 'Calendar',
+  directives: {
+    'b-tooltip': VBTooltip,
+    tooltip: VTooltip.directive
+  },
   data () {
     return {
       currentDate: new Date(),
@@ -85,7 +98,7 @@ export default {
           words: wordsCount,
           checked: checkedStatus
         }
-        this.updateWordsCount(day)
+        // this.updateWordsCount(day)
         daysArray.push(day)
       }
       return daysArray
@@ -95,8 +108,8 @@ export default {
     async fetchWordsData () {
       try {
         // eslint-disable-next-line no-undef
-        const response = await axios.get('your-backend-api-url')
-        this.wordsData = response.data
+        const response = await fetch('your-backend-api-url')
+        this.wordsData = await response.json()
       } catch (error) {
         console.error('Failed to fetch words data:', error)
       }
@@ -160,10 +173,11 @@ export default {
   align-items: center;
   /* background-color: #f0f0f0; */
   background: linear-gradient(rgba(240, 240, 240, 0.5), rgba(240, 240, 240, 0.5)), url('../assets/photo2.png');
-  background-size: cover; /* 适应容器大小 */
+  background-size: cover;       /* 适应容器大小 */
   background-repeat: no-repeat; /* 禁止重复 */
   background-position: center; /* 居中对齐 */
   padding: 10px;
+  /* font-size: 14px; */
 }
 
 .weekdays, .days {
@@ -192,11 +206,11 @@ export default {
   width: 30px;
   height: 30px;
   padding: 5px;
-  margin-top: 5px;   /* 上方间距 */
-  margin-bottom: 5px; /* 下方间距 */
+  margin-top: 3px;   /* 上方间距 */
+  margin-bottom: 3px; /* 下方间距 */
   margin: 15px,15px;
   cursor: pointer;
-  border-radius: 13px;
+  border-radius: 10px;
   /* color: white; */
 }
 
@@ -228,26 +242,34 @@ export default {
 }
 
 .days div.level-1 {
-  background-color: #b1f366de
+  background-color: #b1f366de;
 }
 
 .days div.level-2 {
-  background-color: #96ed33
+  background-color: #96ed33;
 }
 
 .days div.level-3 {
-  background-color: #7cc924
+  background-color: #7cc924;
 }
 
 .days div.level-4 {
-  background-color: #81bd3d
+  background-color: #81bd3d;
 }
 
 .days div.level-5 {
-  background-color: #76ad36
+  background-color: #76ad36;
 }
 
 .days div.level-6 {
-  background-color: #4e870e
+  background-color: #4e870e;
+}
+.tooltip-custom {
+  border: 1px solid #333; /* 设置边框 */
+  background-color: #fff; /* 设置背景色 */
+  color: #000; /* 设置文字颜色 */
+  padding: 10px; /* 设置内边距 */
+  border-radius: 5px; /* 设置圆角 */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* 设置阴影 */
 }
 </style>
