@@ -16,12 +16,12 @@ configure_cors(app)
 register_error_handlers(app)
 
 # Register blueprints
-from app.controllers.vocab_controller import course_bp
+from app.controllers.uservocab_controller import uservocab_bp
 from app.controllers.file_controller import file_bp
 from app.controllers.user_controller import user_bp
 from app.controllers.web_controller import web_bp
 
-app.register_blueprint(course_bp)
+app.register_blueprint(uservocab_bp)
 app.register_blueprint(file_bp)
 app.register_blueprint(user_bp)
 app.register_blueprint(web_bp)
