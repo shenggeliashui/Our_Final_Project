@@ -1,17 +1,18 @@
 <template>
   <header class="site-header" aria-label="网站头部">
     <div class="logo">
-      <img :src="logoSrc" >
+      <img :src="shareLogo" >
     </div>
     <div class="user-info" aria-label="用户信息">
+        <button @click="navigateToHome" class="sign-out-button">首页</button>
         <button class="sign-out-button">个人中心</button>
         <button @click="navigateToYourRoute" class="sign-out-button">反馈</button>
         <button class="sign-out-button">Sign Out</button>
       <div class="user-avatar">
-        <img :src="userAvatarSrc" :alt="altText">
+        <img :src="shareUserAvatar" :alt="altText">
       </div>
       <div class="user-name">
-        {{ userName }}
+        {{ shareUserName }}
       </div>
     </div>
   </header>
@@ -20,18 +21,12 @@
 <script>
 export default {
   name: 'PageHeader',
-  props: {
-    logoSrc: {
-      type: String,
-      required: true
-    },
-    userAvatarSrc: {
-      type: String,
-      required: true
-    },
-    userName: {
-      type: String,
-      required: true
+  props: ['logoSrc', 'userAvatarSrc', 'userName'],
+  data () {
+    return {
+      shareLogo: this.logoSrc,
+      shareUserAvatar: this.userAvatarSrc,
+      shareUserName: this.userName
     }
   },
   computed: {
@@ -42,6 +37,10 @@ export default {
   methods: {
     navigateToYourRoute () {
       this.$router.push('/freeback')
+    },
+    navigateToHome () {
+      // 使用编程式导航返回首页
+      this.$router.push('/')
     }
   }
 }

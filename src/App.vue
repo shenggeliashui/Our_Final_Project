@@ -1,10 +1,5 @@
 <template>
   <div id="app">
-    <PageHeader :userAvatarSrc="userAvatarSrcProp" :userName="'John Doe'"  :logoSrc="logoSrcProp" />
-    <div class="container">
-      <div class="box">
-      </div>
-    </div>
     <router-view/>
   </div>
 </template>
@@ -15,12 +10,6 @@ export default {
   name: 'App',
   components: {
     PageHeader
-  },
-  data () {
-    return {
-      userAvatarSrcProp: require('@/assets/photo1.png'),
-      logoSrcProp: require('@/assets/logo1.png') // 使用 require 导入图片路径
-    }
   }
 }
 </script>

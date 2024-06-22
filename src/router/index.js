@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import freeback from '@/freeback'
+import freeback from '@/view/freeback'
+import Frame from '@/view/frame'
+// import Calendar from '../components/calendar.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/'
-      // name: 'calendar',
-      // component: calendar
+      path: '/',
+      name: 'Frame',
+      component: Frame
     },
     {
       path: '/freeback',
