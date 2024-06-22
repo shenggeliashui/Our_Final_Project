@@ -1,33 +1,33 @@
 <template>
   <div class="user-profile">
     <div class="left-column">
-<!--      <img :src="user.avatar" alt="头像" class="avatar" />-->
-      <img :src="avatarUrl" alt="用户的头像" class="avatar" />
+<!--      <img :src="avatarUrl" alt="用户的头像" class="avatar" />-->
+      <div class="avatar-container">
+        <img :src="avatarUrl" alt="用户的头像" class="avatar" @click="triggerFileInput" />
+        <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" />
+      </div>
       <div class="user-info">
-        <div>
-          <label><strong>头像:</strong></label>
-          <input type="file" @change="onFileChange" />
-        </div>
-        <div>
+        <div class="info-item">
           <label><strong>昵称:</strong></label>
-          <input v-model="editableUser.nickname" />
+          <span v-show="!editingNickname" @click="editNickname">{{ editableUser.nickname }}</span>
+          <input v-show="editingNickname" v-model="editableUser.nickname" class="info-input" @blur="stopEditingNickname" />
         </div>
-        <div>
+        <div class="info-item">
           <label><strong>性别:</strong></label>
-          <select v-model="editableUser.gender">
+          <select v-model="editableUser.gender" class="info-input">
             <option value="男">男</option>
             <option value="女">女</option>
           </select>
         </div>
-        <div>
+        <div class="info-item">
           <label><strong>生日:</strong></label>
-          <input type="date" v-model="editableUser.birthday" />
+          <input type="date" v-model="editableUser.birthday" class="info-input" />
         </div>
-        <div>
+        <div class="info-item">
           <label><strong>注册日期:</strong></label>
-          <input type="date" v-model="editableUser.registrationDate" disabled />
+          <input type="date" v-model="editableUser.registrationDate" class="info-input" disabled />
         </div>
-        <button @click="saveProfile">保存</button>
+        <button @click="saveProfile" class="save-button">保存</button>
       </div>
     </div>
     <div class="center-column">
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { computed,ref } from 'vue';
+import { computed,ref,onMounted } from 'vue';
 import { useStore } from 'vuex';
 import Calendar from '../components/Calendar.vue';
 import axios from "axios";
@@ -79,9 +79,10 @@ export default {
     const notifications = computed(() => store.state.notifications);
     const studyProgress = computed(() => store.state.studyProgress);
     const wordLists = computed(() => store.state.wordLists);
-    // const selectedWordList = ref(store.state.currentWordList);
     const selectedWordListId = ref(store.state.currentWordList.id);
     const currentWordList = computed(() => store.getters.currentWordList);
+    // const showInput = ref(false);
+    const editingNickname = ref(false);
 
     const avatarUrl = computed(() => {
       // 使用 import 语句来处理 Webpack 静态资源
@@ -102,23 +103,6 @@ export default {
         console.error('Error saving profile:', error);
       }
     };
-    // const onFileChange = (e) => {
-    //   const file = e.target.files[0];
-    //   if (file) {
-    //     const reader = new FileReader();
-    //     reader.onload = (event) => {
-    //       user.value.avatar = event.target.result; // Base64 URL
-    //     };
-    //     reader.readAsDataURL(file);
-    //   }
-    // };
-    // const changeWordList = async () => {
-    //   try {
-    //     await store.dispatch('changeWordList', selectedWordList.value);
-    //   } catch (error) {
-    //     console.error('更换词库失败:', error);
-    //   }
-    // };
     const changeWordList = async () => {
       try {
         await store.dispatch('changeWordList', selectedWordListId.value);
@@ -144,6 +128,21 @@ export default {
       }
     };
 
+    const triggerFileInput = () => {
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput) fileInput.click();
+    };
+
+    const editNickname = () => {
+      editingNickname.value = true;
+      onMounted(() => {
+        const input = document.querySelector('.info-input');
+        if (input) input.focus();
+      });
+    };
+    const stopEditingNickname = () => {
+      editingNickname.value = false;
+    };
 
     return {
       editableUser,
@@ -155,7 +154,12 @@ export default {
       avatarUrl,
       saveProfile,
       changeWordList,
-      onFileChange
+      onFileChange,
+      triggerFileInput,
+      // showInput,
+      editingNickname,
+      editNickname,
+      stopEditingNickname
     };
   }
 };
@@ -184,20 +188,81 @@ export default {
   align-items: center;
 }
 
+.avatar-container {
+  position: relative;
+}
+
 .avatar {
   width: 150px;
   height: 150px;
   border-radius: 50%;
   margin-bottom: 20px;
+  cursor: pointer; /* Add cursor pointer to indicate clickable */
+
 }
 
-.user-info p {
+.info-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   margin: 10px 0;
+}
+
+.info-item label {
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.info-input {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s;
+}
+
+.info-input:focus {
+  border-color: #4CAF50;
+}
+
+.save-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.info-item span {
+  flex-grow: 1;
+  cursor: pointer; /* Add cursor pointer to indicate clickable */
+}
+
+.info-item input[type="date"] {
+  display: inline-block;
+  margin-top: 0;
+  margin-left: 10px;
+}
+
+.info-item span:hover {
+  text-decoration: underline;
 }
 
 .center-column {
   flex: 2;
 }
+
+
 
 .notification, .study-progress {
   margin-bottom: 20px;
