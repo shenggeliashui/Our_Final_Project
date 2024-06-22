@@ -51,3 +51,5 @@
 ### 修改词库
 ![img_7.png](img_7.png)
 
+### 个人信息 美化
+![img_8.png](img_8.png)
