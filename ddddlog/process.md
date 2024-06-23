@@ -52,7 +52,17 @@
 ![img_7.png](img_7.png)
 
 ### 个人信息 美化
+鼠标点击头像/昵称，就可以修改
 ![img_8.png](img_8.png)
 
 ### 登录后跳转到个人中心，请求后端，mock模拟
 ![img_9.png](img_9.png)
+
+# 测试
+```
+npm install @vue/test-utils --save-dev
+vue add @vue/cli-plugin-unit-jest
+```
+运行不成功，报错：
+![img_10.png](img_10.png)![img_11.png](img_11.png)
+试过各种babel配置、"type":"module" 都没有解决
