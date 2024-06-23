@@ -1,0 +1,117 @@
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'MemoryTenWords',
+  data() {
+    return {
+      words: [],
+      index: 0,
+      actual_index: 0,
+      num: 0,
+      usphone: "",
+      ukphone: "",
+      example_sentence: "",
+      meaning: ""
+    };
+  },
+  mounted() {
+    this.num = 0;
+    this.index = 0;
+    this.RandomGetTenWords();
+  },
+  methods: {
+    NextButton() {
+      this.index = this.actual_index;
+      if (this.index >= this.num) {
+        this.$router.push({ name: 'FinishTenWords' });
+      }
+      this.get_word_phonetic();
+      this.example_sentence = "";
+      this.meaning = "";
+    },
+    async KnowWordButton() {
+      await this.get_word_example();
+      await this.get_word_meaning();
+      await this.DeleteUnmemoriedWord();
+      await this.AddMemoriedWord();
+      this.actual_index += 1;
+    },
+    QuitButton() {
+      this.$router.push({ name: 'HomePage' });
+    },
+    async UnKnowWordButton() {
+      await this.get_word_example();
+      await this.get_word_meaning();
+    },
+    async DeleteUnmemoriedWord() {
+      try {
+        await axios.post('http://127.0.0.1:5000/api/delete-unmemorized-word', {
+          word: this.words[this.index]
+        });
+      } catch (error) {
+        console.error('Error calling API:', error);
+      }
+    },
+    async AddMemoriedWord() {
+      try {
+        await axios.post('http://127.0.0.1:5000/api/add-memorized-word', {
+          word: this.words[this.index]
+        });
+      } catch (error) {
+        console.error('Error calling API:', error);
+      }
+    },
+    async RandomGetTenWords() {
+      try {
+        while (this.num < 10) {
+          const response = await axios.get('http://127.0.0.1:5000/api/random-get-word-unmemorized');
+          const word = response.data.word;
+          if (!this.words.includes(word)) {
+            this.words.push(word);
+            if (this.num === 0) {
+              this.word = this.words[0];
+            }
+            this.num += 1;
+          }
+        }
+        this.get_word_phonetic();
+      } catch (error) {
+        console.error('Error calling API:', error);
+      }
+    },
+    async get_word_phonetic() {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/api/get-word-phonetic', {
+          params: { word: this.words[this.index] }
+        });
+        this.usphone = response.data.usphone;
+        this.ukphone = response.data.ukphone;
+      } catch (error) {
+        console.error('Error calling API:', error);
+      }
+    },
+    async get_word_example() {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/api/get-word-example', {
+          params: { word: this.words[this.index] }
+        });
+        this.example_sentence = response.data.example;
+      } catch (error) {
+        console.error('Error calling API:', error);
+      }
+    },
+    async get_word_meaning() {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/api/get-word-meaning', {
+          params: { word: this.words[this.index] }
+        });
+        this.meaning = response.data.meaning;
+      } catch (error) {
+        console.error('Error calling API:', error);
+      }
+    }
+  }
+};
+</script>
