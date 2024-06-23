@@ -3,6 +3,7 @@
       <PageHeader :userAvatarSrc="userAvatarSrcProp" :userName="'John Doe'"  :logoSrc="logoSrcProp" />
       <div class="container">
         <div class="box">
+          <slot></slot>
         </div>
       </div>
       <router-view/>

@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import freeback from '@/view/freeback'
+import FreeBackShow from '@/view/FreeBack'
 import AllFrame from '@/view/frame'
-import SpellTenWords from '@/view/Spell'
+import SpellWords from '@/view/SpellTenWords'
+import HomeShow from  '@/view/HomeShow'
 // import Calendar from '../components/calendar.vue'
 
 // 创建路由实例
@@ -10,18 +11,18 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'AllFrame',
-      component: AllFrame
+      name: 'HomeShow',
+      component: HomeShow
     },
     {
       path: '/freeback',
-      name: 'Freeback',
-      component: freeback
+      name: 'FreeBackShow',
+      component: FreeBackShow
     },
     {
-      path: '/spell',
+      path: '/Spell',
       name: 'Spell',
-      component: SpellTenWords
+      component: SpellWords
     }
   ]
 })

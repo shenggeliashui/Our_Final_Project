@@ -1,8 +1,8 @@
 <template>
   <div id="FreeBack">
-    <PageHeader :userAvatarSrc="userAvatarSrcProp" :userName="'John Doe'" :logoSrc="logoSrcProp" />
+    <!-- <PageHeader :userAvatarSrc="userAvatarSrcProp" :userName="'John Doe'" :logoSrc="logoSrcProp" />
     <div class="container">
-      <div class="box">
+      <div class="box"> -->
         <form>
           <div class="form-group">
             <label for="name">姓名:</label>
@@ -18,24 +18,24 @@
           </div>
           <button type="submit">提交</button>
         </form>
-      </div>
-    </div>
+      <!-- </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import PageHeader from '../components/site_header.vue'
+// import PageHeader from './site_header.vue'
 export default {
   name: 'FreeBack',
-  components: {
-    PageHeader
-  },
-  data () {
-    return {
-      userAvatarSrcProp: require('@/assets/photo1.png'),
-      logoSrcProp: require('@/assets/logo1.png')
-    }
-  }
+  // components: {
+  //   PageHeader
+  // },
+  // data () {
+  //   return {
+  //     userAvatarSrcProp: require('@/assets/photo1.png'),
+  //     logoSrcProp: require('@/assets/logo1.png')
+  //   }
+  // }
 }
 </script>
 
