@@ -5,13 +5,7 @@
 </template>
 
 <script>
-import PageHeader from './components/site_header.vue'
-export default {
-  name: 'App',
-  components: {
-    PageHeader
-  }
-}
+
 </script>
 
 <style>

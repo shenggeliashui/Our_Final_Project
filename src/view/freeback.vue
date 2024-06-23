@@ -1,5 +1,5 @@
 <template>
-  <div id="Frame">
+  <div id="FreeBack">
     <PageHeader :userAvatarSrc="userAvatarSrcProp" :userName="'John Doe'" :logoSrc="logoSrcProp" />
     <div class="container">
       <div class="box">
@@ -26,7 +26,7 @@
 <script>
 import PageHeader from '../components/site_header.vue'
 export default {
-  name: 'Frame',
+  name: 'FreeBack',
   components: {
     PageHeader
   },

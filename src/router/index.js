@@ -1,22 +1,29 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import freeback from '@/view/freeback'
-import Frame from '@/view/frame'
+import AllFrame from '@/view/frame'
+import SpellTenWords from '@/view/Spell'
 // import Calendar from '../components/calendar.vue'
 
-Vue.use(Router)
-
-export default new Router({
+// 创建路由实例
+const router = createRouter({
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
-      name: 'Frame',
-      component: Frame
+      name: 'AllFrame',
+      component: AllFrame
     },
     {
       path: '/freeback',
       name: 'Freeback',
       component: freeback
+    },
+    {
+      path: '/spell',
+      name: 'Spell',
+      component: SpellTenWords
     }
   ]
 })
+
+export default router
