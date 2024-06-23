@@ -3,23 +3,23 @@
 > A Vue.js project
 
 ## 前端文件组成说明：
----src：源代码
-    ---assets：图片等
-    ---components：组件
-        ---calendar：日历
-        ---site_header:导航栏
-        ---Spell:拼写
-        ---global.css:全局css,背景和底层文本框
-        ---Homepage:首页组件
-        ---freeback：反馈页面组件
-    ---router：路由配置
-    ---view：完整页面的vue文件
-        ---frame：框架
-        ---FreeBack：客户反馈界面
-        ---SpellTenWords：拼写界面
-        ---HomeShow:主页
-    ---App.vue：根组件
-    ---main.js：入口
+---src：源代码  
+   &emsp; ---assets：图片等  
+    &emsp;---components：组件  
+         &emsp;&emsp; &emsp;---calendar：日历  
+         &emsp;&emsp; &emsp;---site_header:导航栏  
+        &emsp;&emsp; &emsp;---Spell:拼写  
+        &emsp;&emsp; &emsp;---global.css:全局css,背景和底层文本框  
+       &emsp;&emsp; &emsp;---Homepage:首页组件  
+      &emsp;&emsp; &emsp;---freeback：反馈页面组件  
+    &emsp; ---router：路由配置  
+    &emsp; ---view：完整页面的vue文件  
+        &emsp; &emsp; &emsp;---frame：框架  
+       &emsp; &emsp; &emsp;---FreeBack：客户反馈界面  
+        &emsp; &emsp; &emsp;---SpellTenWords：拼写界面  
+       &emsp; &emsp; &emsp;---HomeShow:主页  
+    &emsp; ---App.vue：根组件  
+     &emsp;---main.js：入口  
     
 
 ## Build Setup
