@@ -48,6 +48,14 @@ export default {
         const token = response.data.token;
         // 存储令牌，比如存储在 localStorage 中
         localStorage.setItem('token', token);
+
+         // 获取用户信息
+        const userResponse = await api.get('/user/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        this.$store.commit('setUser', userResponse.data);
         // 登录成功后重定向到主页
         this.$router.push('/home');
       } catch (error) {
