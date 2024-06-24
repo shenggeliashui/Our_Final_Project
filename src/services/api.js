@@ -13,7 +13,7 @@ const api = axios.create({
 const mock = new MockAdapter(api);
 
 // 模拟登录请求
-mock.onPost('/login').reply(config => {
+mock.onPost('/api/login').reply(config => {//backend
   const { username, password } = JSON.parse(config.data);
   if (username === 'test' && password === 'test.com') {
     return [200, { token: 'mock-token' }];
@@ -23,7 +23,7 @@ mock.onPost('/login').reply(config => {
 });
 
 // 模拟注册请求
-mock.onPost('/register').reply(config => {
+mock.onPost('api/register').reply(config => {//backend
   const { username, password } = JSON.parse(config.data);
   if (username !== 'test') {
     const response = { message: '注册成功' };
@@ -36,7 +36,7 @@ mock.onPost('/register').reply(config => {
 });
 
 // 模拟获取用户信息的请求
-mock.onGet('/user/profile').reply(config => {
+mock.onGet('/api/profile').reply(config => {//backend
   const token = config.headers.Authorization;
   if (token === 'Bearer mock-token') {
     const user = {
@@ -53,13 +53,13 @@ mock.onGet('/user/profile').reply(config => {
 });
 
 // 模拟保存用户信息的请求
-mock.onPost('/api/saveProfile').reply(config => {
+mock.onPost('/api/userUpdateInformation').reply(config => {//backend
   const user = JSON.parse(config.data);
   return [200, user]; // 返回修改后的用户信息
 });
 
 // 模拟上传头像的请求
-mock.onPost('/api/uploadAvatar').reply(() => {
+mock.onPost('/api/files/upload').reply(() => {//backend
   const avatar = 'new-avatar.jpg'; // 模拟上传后的新头像
   return [200, { avatar }];
 });
@@ -69,8 +69,8 @@ mock.onGet('/user/studyProgress').reply(config => {
   const token = config.headers.Authorization;
   if (token === 'Bearer mock-token') {
     const studyProgress = [
-      { id: 1, name: '词库1', progress: 50 },
-      { id: 2, name: '词库2', progress: 7 },
+      { id: 1, name: '词库a', progress: 5 },
+      { id: 2, name: '词库b', progress: 7 },
       { id: 3, name: '词库3', progress: 10 }
     ];
     return [200, studyProgress];
@@ -80,7 +80,7 @@ mock.onGet('/user/studyProgress').reply(config => {
 });
 
 // 模拟更换词库的请求
-mock.onPost('/api/changeWordList').reply(config => {
+mock.onPost('/api/userUpdateBookId').reply(config => {//backend
   const { wordListId } = JSON.parse(config.data);
   // 模拟更换词库的成功响应
   return [200, { success: true, wordListId }];
