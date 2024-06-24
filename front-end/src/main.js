@@ -6,8 +6,8 @@ import './components/global.css'
 
 const app = createApp(App)
 app.use(router)
-app.use(VTooltip)
-
+// app.use(VTooltip)
+app.directive('tooltip', VTooltip.directive)
 app.config.productionTip = false
 
 app.mount('#app')

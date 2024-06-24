@@ -2,10 +2,10 @@
     <div id="AllFrame">
       <PageHeader :userAvatarSrc="userAvatarSrcProp" :userName="'John Doe'"  :logoSrc="logoSrcProp" />
       <div class="container">
-        <div class="box">
+        <!-- <div class="box"> -->
           <slot></slot>
         </div>
-      </div>
+      <!-- </div> -->
       <router-view/>
     </div>
   </template>

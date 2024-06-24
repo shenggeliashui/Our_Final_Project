@@ -45,7 +45,7 @@
     methods: {
       MemoryWordButton() {
         this.$router.push({
-          name: 'MemoryTenWords'
+          name: 'MemoryShow'
         });
       },
       WriteFromMemoryButton() {

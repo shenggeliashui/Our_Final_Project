@@ -1,7 +1,9 @@
 <template>
     <div id="FreeBackShow">
       <Frame>
+        <div class="box">
        <FreeBack />
+      </div>
       </Frame>
     </div>
   </template>

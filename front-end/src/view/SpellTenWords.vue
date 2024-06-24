@@ -1,7 +1,9 @@
 <template>
     <div id="SpellWords">
       <Frame>
+        <div class="box">
        <SpellTenWords />
+      </div>
       </Frame>
     </div>
   </template>

@@ -13,17 +13,16 @@
         v-for="(day, index) in days"
         :key="index"
         class="day div"
-        v-b-tooltip.hover.html="{ title: day.date ? `背词数量: ${day.words}` : '', customClass: 'tooltip-custom' }"
+        v-tooltip="{ title: day.date ? `背词数量: ${day.words}` : '', customClass: 'tooltip-custom' }"
         :class="{
           today: isToday(day),
           checked: !day.checked,
           empty: !day.date,
           'level-0': day.words === 0 && day.date,
-          'level-2': day.words >= 1,
-          'level-3': day.words === 3,
-          'level-4': day.words === 4,
-          'level-5': day.words === 5,
-          'level-6': day.words >= 6.
+          'level-2': day.words >= 1 && day.words < 10,
+          'level-3': day.words >= 10 && day.words < 30,
+          'level-4': day.words >= 30 && day.words < 60,
+          'level-5': day.words >= 60
         }"
         @click="toggleCheck(day)"
       >
@@ -38,16 +37,15 @@
 // eslint-disable-next-line no-unused-vars
 import VTooltip from 'v-tooltip'
 // eslint-disable-next-line no-unused-vars
-import { createApp } from 'vue'
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
-import { VBTooltip } from 'bootstrap-vue'
+// import { VBTooltip } from 'bootstrap-vue'
 // import axios from 'axios'
 export default {
-  name: 'Calendar',
+  name: 'CalendarL',
   directives: {
-    'b-tooltip': VBTooltip,
-    tooltip: VTooltip.directive
+    // 'b-tooltip': VBTooltip,
+    tooltip: VTooltip
   },
   data () {
     return {
@@ -77,28 +75,16 @@ export default {
       daysArray.length = 0
 
       for (let i = 0; i < firstDay; i++) {
-        daysArray.push({ date: null, words: 0, checked: false })
+        daysArray.push({ date: null, words: 0, level:0,checked: false })
       }
 
       for (let i = 1; i <= daysInCurrentMonth; i++) {
-        let wordsCount = 0
-        let checkedStatus = false
-
-        // 判断是否加载后端数据或者使用默认值
-        if (this.currentYear < today.getFullYear() ||
-            (this.currentYear === today.getFullYear() && this.currentMonth < today.getMonth()) ||
-            (this.currentYear === today.getFullYear() && this.currentMonth === today.getMonth() && i <= today.getDate())) {
-          const wordDataForDay = this.wordsData.find(data => data.date === i)
-          wordsCount = wordDataForDay ? wordDataForDay.words : 3
-          checkedStatus = true
-        }
-
+        const wordDataForDay = this.wordsData.find(data => data.date === i)
         const day = {
           date: i,
-          words: wordsCount,
-          checked: checkedStatus
+          words: wordDataForDay ? wordDataForDay.words : 0,
+          checked: wordDataForDay ? wordDataForDay.checked : true
         }
-        // this.updateWordsCount(day)
         daysArray.push(day)
       }
       return daysArray
@@ -106,13 +92,22 @@ export default {
   },
   methods: {
     async fetchWordsData () {
-      try {
-        // eslint-disable-next-line no-undef
-        const response = await fetch('your-backend-api-url')
-        this.wordsData = await response.json()
-      } catch (error) {
-        console.error('Failed to fetch words data:', error)
-      }
+      const url=`http://127.0.0.1:5000/api/get_word_count?year=${this.currentYear}&month=${this.currentMonth}`
+      fetch(url)
+      .then(async response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json()
+        this.wordsData = data
+      })
+      .then(data => {
+        console.log(data)
+      })
+      .catch(error => {
+        console.log('Error fetching word count:', error)
+      })
+
     },
     daysInMonth (month, year) {
       return new Date(year, month + 1, 0).getDate()
@@ -230,7 +225,7 @@ export default {
 }
 
 .days div.checked {
-  background-color: #cacec65c; /* Green color for checked days */
+  background-color: #32e4915c; /* Green color for checked days */
 }
 
 .days div.empty {

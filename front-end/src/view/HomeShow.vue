@@ -1,7 +1,9 @@
 <template>
     <div id="HomeShow">
       <Frame>
+        <div class="box">
        <HomePage />
+      </div>
       </Frame>
     </div>
   </template>
