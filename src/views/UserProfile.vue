@@ -45,7 +45,7 @@
         <div class="change-wordlist">
           <label for="wordlist-select">更换词库:</label>
           <select id="wordlist-select" v-model="selectedWordListId">
-            <option v-for="list in wordLists" :key="list.id" :value="list.id">
+            <option v-for="list in studyProgress" :key="list.id" :value="list.id">
               {{ list.name }}<span v-if="list.id === currentWordList.id"> </span>
             </option>
           </select>
