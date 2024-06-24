@@ -66,8 +66,9 @@ export default {
   methods: {
     async RandomGetTenWords () {
       try {
+        const response1 = await axios.get('http://127.0.0.1:5000/api/dictation_fetch_random_words')
         while (this.num < 10) {
-          const response = await axios.get('http://127.0.0.1:5000/api/random-get-word-unmemorized')   //需要修改
+          const response = await axios.get('http://127.0.0.1:5000/api/dictation_get_current_word')   //需要修改
           const word = response.data.word
           if (!this.words.includes(word)) {
             this.words.push(word)
@@ -76,6 +77,7 @@ export default {
             }
             this.num += 1
           }
+          const response2 = await axios.get('http://127.0.0.1:5000/api/dictation_move_to_next_word')
         }
         this.get_word_phonetic()
         this.get_word_meaning()
@@ -106,25 +108,24 @@ export default {
     },
 
     async SubmitButton () {
-      // this.checkSpelling();
+      this.checkSpelling();
       this.NextButton()
     },
 
     async QuitButton () {
-      this.$router.push('/')
+      this.$router.push('/HomeShow')
     },
 
     async checkSpelling() {
-      // 模拟调用后端 API
-      // 实际情况下，请替换为你的后端 API 地址和实际的请求方式
       try {
-        const apiUrl = 'http://your-backend-api/check-spelling';
+        const apiUrl = 'http://127.0.0.1:5000/api/dictation_is_word_match';
         const response = await axios.post(apiUrl, { userInput: this.userInput });
         
-        if (response.data.result === 'correct') {
+        if (response.data.match) {
           this.NextButton();
         } else {
           this.inputError = true;
+          this.correctWord = response.data.correct_word; // 可选：将正确的单词显示在页面上
           setTimeout(() => {
             this.userInput = '';
             this.inputError = false;
@@ -137,7 +138,7 @@ export default {
 
     async get_word_phonetic () {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/get-word-phonetic', {
+        const response = await axios.get('http://127.0.0.1:5000/api/dictation_get_phonetics', {
           params: { word: this.words[this.index] }
         })
         this.usphone = response.data.usphone
@@ -149,7 +150,7 @@ export default {
 
     async get_word_example () {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/get-word-example', {
+        const response = await axios.get('http://127.0.0.1:5000/api/dictation_get_example', {
           params: { word: this.words[this.index] }
         })
         this.example_sentence = response.data.example
@@ -160,7 +161,7 @@ export default {
 
     async get_word_meaning () {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/get-word-meaning', {
+        const response = await axios.get('http://127.0.0.1:5000/api/dictation_get_pos_and_tran', {
           params: { word: this.words[this.index] }
         })
         this.meaning = response.data.meaning

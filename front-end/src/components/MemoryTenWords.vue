@@ -78,7 +78,7 @@
         this.actual_index += 1;
       },
       QuitButton() {
-        this.$router.push('/')
+        this.$router.push('/HomeShow')
       },
       async UnKnowWordButton() {
         await this.get_word_example();

@@ -5,9 +5,9 @@
     </div>
     <div class="user-info" aria-label="用户信息">
         <button @click="navigateToHome" class="sign-out-button">首页</button>
-        <button class="sign-out-button">个人中心</button>
+        <button @click="navigateToProfile" class="sign-out-button">个人中心</button>
         <button @click="navigateToYourRoute" class="sign-out-button">反馈</button>
-        <button class="sign-out-button">Sign Out</button>
+        <button @click="navigateToLogin" class="sign-out-button">Sign Out</button>
       <div class="user-avatar">
         <img :src="shareUserAvatar" :alt="altText">
       </div>
@@ -39,6 +39,13 @@ export default {
       this.$router.push('/freeback')
     },
     navigateToHome () {
+      // 使用编程式导航返回首页
+      this.$router.push('/HomeShow')
+    },
+    navigateToProfile () {
+      this.$router.push('/profile')
+    },
+    navigateToLogin () {
       // 使用编程式导航返回首页
       this.$router.push('/')
     }
