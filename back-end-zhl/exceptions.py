@@ -1,8 +1,6 @@
-# 暂时不用改该文件目录下的
 import logging
 from flask import Flask, jsonify
-from app.common.result import Result
-from app.exceptions.custom_exceptions import CustomException
+from common import Result
 
 logger = logging.getLogger(__name__)
 
@@ -19,4 +17,9 @@ def register_error_handlers(app: Flask):
         response = Result.error(e.get_msg()).to_dict()
         return jsonify(response), 400
     
-# 在这里可以定义其他异常处理程序
+class CustomException(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def get_msg(self):
+        return self.msg
