@@ -1,6 +1,7 @@
-from flask import request, jsonify, send_file
+from flask import request, jsonify, send_file, session
 from common import Result
 from services import UserService
+from models import User
 import os
 import time
 from werkzeug.utils import secure_filename
@@ -17,6 +18,7 @@ def hello():
 def login():
     account = request.get_json()
     db_account = user_service.login(account)
+    session['user_id'] = db_account.username
     return jsonify(Result.success(db_account).to_dict())
 
 # 注册页面
@@ -27,6 +29,20 @@ def register():
         return jsonify(Result.error("账号或密码必须填写！").to_dict())
     user_service.register(account)
     return jsonify(Result.success().to_dict())
+
+# 个人信息
+@app.route('/api/profile', methods=['GET'])
+def profile():
+    if 'user_id' not in session:
+        return jsonify(Result.error("user not logged in").to_dict())
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    if user:
+        return jsonify(Result.success().to_dict())
+    else:
+        return jsonify(Result.error("user not found").to_dict())
 
 ROOT_PATH = os.path.join(os.getcwd(), 'files')
 @app.route('/api/files/upload', methods=['POST'])
@@ -54,27 +70,35 @@ def download():
     return send_file(file_path, as_attachment=True)
 
 user_service = UserService()
-@app.route('/api/user/add', methods=['POST'])
+@app.route('/api/userAdd', methods=['POST'])
 def add_user():
     user = request.get_json()
+    if not user.get('username') or not user.get('password'):
+        return jsonify(Result.error("账号或密码必须填写！").to_dict())
     user_service.add(user)
     return jsonify(Result.success().to_dict())
 
-@app.route('/api/user/delete/<int:id>', methods=['DELETE'])
+@app.route('/api/userDelete/<int:id>', methods=['DELETE'])
 def delete_user(id):
     user_service.delete_by_id(id)
     return jsonify(Result.success().to_dict())
 
-@app.route('/api/user/update', methods=['PUT'])
-def update_user():
+@app.route('/api/userUpdateInformation', methods=['PUT'])
+def update_user_information():
     user = request.get_json()
     user_service.update_by_id(user)
     return jsonify(Result.success().to_dict())
 
-@app.route('/api/user/selectPage', methods=['GET'])
+@app.route('/api/userUpdateBookId', methods=['PUT'])
+def update_user_bookId():
+    user = request.get_json()
+    if not user.get('cur_book'):
+        return jsonify(Result.error("您未选择词库！").to_dict())
+    user_service.update_by_id(user)
+    return jsonify(Result.success().to_dict())
+
+@app.route('/api/userSelectPage', methods=['GET'])
 def select_page():
-    page_num = request.args.get('pageNum', default=1, type=int)
-    page_size = request.args.get('pageSize', default=10, type=int)
     user = request.args.to_dict()
-    page_info = user_service.select_page(page_num, page_size, user)
+    page_info = user_service.select_page(user)
     return jsonify(Result.success(page_info).to_dict())

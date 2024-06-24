@@ -12,6 +12,14 @@ class UserMapper:
         db.session.commit()
 
     @staticmethod
+    def select_all(user_filter):
+        return User.query.filter(
+            User.username.like(f"%{user_filter['username']}%"),
+            User.name.like(f"%{user_filter['name']}%")
+        ).order_by(User.id.desc()).all()
+
+
+    @staticmethod
     def delete_by_id(user_id):
         user = User.query.get(user_id)
         if user:

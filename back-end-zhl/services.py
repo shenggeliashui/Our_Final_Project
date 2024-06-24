@@ -33,3 +33,6 @@ class UserService:
 
     def update_by_id(self, user: User):
         self.user_mapper.update_by_id(user)
+
+    def select_page(self, user_filter: dict):
+        return self.user_mapper.select_all(user_filter).items
