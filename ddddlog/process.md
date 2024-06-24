@@ -66,3 +66,4 @@ vue add @vue/cli-plugin-unit-jest
 运行不成功，报错：
 ![img_10.png](img_10.png)![img_11.png](img_11.png)
 试过各种babel配置、"type":"module" 都没有解决
+最终通过配置jest："transformIgnorePatterns": ['node_modules/(?!(axios)/)'] 成功解决
