@@ -135,7 +135,7 @@ export default {
         formData.append('avatar', file);
         try {
           // const response = await axios.post('/api/uploadAvatar', formData, {
-          const response = await api.post('/api/uploadAvatar', formData, {
+          const response = await api.post('/api/files/upload', formData, {//backend
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -173,7 +173,7 @@ export default {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          const response = await api.get('/user/profile', {
+          const response = await api.get('/api/profile', {//backend
             headers: { Authorization: `Bearer ${token}` }
           });
           editableUser.value = response.data;
