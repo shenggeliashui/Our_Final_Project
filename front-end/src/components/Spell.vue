@@ -87,7 +87,7 @@ export default {
     async NextButton () {
       this.index = this.actual_index
       if (this.index >= this.num) {
-        this.$router.push({ name: 'FinishTenWords' })
+        this.$router.push({ name: 'FinishMemoShow' });
       }
       this.get_word_phonetic()
       this.get_word_meaning()

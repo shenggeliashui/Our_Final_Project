@@ -40,7 +40,7 @@ export default {
   methods: {
     ContinueButton() {
       this.$router.push({
-        name: 'MemoryTenWords'
+        name: 'MemoryShow'
       });
     },
     QuitButton() {
@@ -75,7 +75,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* height: 100px; */
+  height: 100vh;
 }
 
 main {
