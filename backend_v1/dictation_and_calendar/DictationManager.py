@@ -1,4 +1,4 @@
-from db_connection import get_connection,get_book_id
+from .db_connection import get_connection,get_book_id
 from mysql.connector import Error
 import nltk
 from nltk.stem import PorterStemmer

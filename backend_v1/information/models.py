@@ -1,4 +1,5 @@
-from main import db
+from .main import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class Account:
     def __init__(self, username=None, password=None, email=None):
@@ -42,6 +43,12 @@ class User(db.Model):
         self.email = email
         self.sex = sex
         self.avatar = avatar
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def to_dict(self):
         data = super().to_dict()

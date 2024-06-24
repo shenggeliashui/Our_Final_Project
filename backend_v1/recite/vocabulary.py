@@ -2,8 +2,8 @@ import os
 import random
 from datetime import date
 import pymysql
-from unmemorized import clear_unmemorized_vocabulary,transfer_to_unmemorized
-from memorized import clear_memorized_vocabulary
+from .unmemorized import clear_unmemorized_vocabulary,transfer_to_unmemorized
+from .memorized import clear_memorized_vocabulary
 # 定义当前词典id
 book_id = "SAT"
 

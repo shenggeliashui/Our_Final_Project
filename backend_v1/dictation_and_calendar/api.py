@@ -1,17 +1,20 @@
 # dictation_and_calendar/api.py
-from flask import Flask, Blueprint, request, jsonify
-from DictationManager import DictationManager
-from word_calendar import get_word_count_and_levels
+from flask import Blueprint, request, jsonify
+from .DictationManager import DictationManager
+from .word_calendar import get_word_count_and_levels
 
-app = Flask(__name__)
-api_blueprint = Blueprint('api', __name__)
+api_blueprint = Blueprint('dictation_and_calendar', __name__)
 
 # 初始化 DictationManager 实例
 dictation_manager = DictationManager()
 
 @api_blueprint.route('/dictation_fetch_random_words', methods=['GET'])
 def dictation_fetch_random_words():
-    dictation_manager.fetch_random_words()
+    book_id = request.args.get('book_id')
+    if not book_id:
+        return jsonify({'error': 'Missing book_id parameter'}), 400
+    
+    dictation_manager.fetch_random_words(book_id)
     if not dictation_manager.words_info:
         return jsonify({'error': 'Failed to fetch random words'}), 500
     
@@ -92,9 +95,4 @@ def get_word_count_endpoint():
         return jsonify({"error": "Error fetching word count"}), 500
 
     return jsonify(word_count_array)
-
-app.register_blueprint(api_blueprint, url_prefix='/api')
-
-if __name__ == '__main__':
-    app.run(debug=True)
 

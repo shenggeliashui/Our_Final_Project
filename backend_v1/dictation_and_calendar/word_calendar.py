@@ -1,5 +1,5 @@
 import calendar
-from db_connection import get_connection
+from .db_connection import get_connection
 from mysql.connector import Error
 
 def get_word_count_and_levels(year, month):
