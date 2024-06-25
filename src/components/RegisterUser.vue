@@ -84,7 +84,7 @@ export default {
 
       if (Object.keys(this.errors).length === 0) {
         try {
-          const response = await api.post('/register', {
+          const response = await api.post('/api/register', {
             username: this.username,
             password: this.password
           });

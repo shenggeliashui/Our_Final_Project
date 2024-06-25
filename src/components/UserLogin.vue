@@ -38,7 +38,7 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await api.post('/login', {
+        const response = await api.post('/api/login', {//backend
           username: this.username,
           password: this.password
         });
@@ -50,7 +50,7 @@ export default {
         localStorage.setItem('token', token);
 
          // 获取用户信息
-        const userResponse = await api.get('/user/profile', {
+        const userResponse = await api.get('/api/profile', {//backend
           headers: {
             Authorization: `Bearer ${token}`
           }
