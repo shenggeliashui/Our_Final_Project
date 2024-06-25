@@ -1,8 +1,20 @@
+import sys
+import os
+
+# 获取当前文件所在的目录
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# 获取目标模块所在的目录路径
+target_dir = os.path.abspath(os.path.join(current_dir, '..', 'recite'))
+
+# 将目标目录添加到sys.path
+sys.path.append(target_dir)
+
 from models import Account, User
 from exceptions import CustomException
 from mapper import UserMapper
-from recite.memorized import get_memorized_num_with_id
-from recite.unmemorized import get_unmemorized_num
+from memorized import get_memorized_num_with_id
+from unmemorized import get_unmemorized_num
 
 class UserService:
     def __init__(self):
