@@ -1,4 +1,4 @@
-from db_connection import get_connection
+from db_connection import get_connection,get_book_id
 from mysql.connector import Error
 import nltk
 from nltk.stem import PorterStemmer
@@ -12,8 +12,9 @@ class DictationManager:
         self.words_info = []
         self.current_index = 0
 
-    def fetch_random_words(self, book_id):
+    def fetch_random_words(self):
         connection = get_connection()
+        book_id = get_book_id()
         try:
             if connection:
                 cursor = connection.cursor()

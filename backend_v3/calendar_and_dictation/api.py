@@ -18,21 +18,11 @@ def dictation_fetch_random_words():
 
 @app.route('/api/dictation_get_current_word', methods=['GET'])
 def dictation_get_current_word():
-    current_word = dictation_manager.get_current_word()
-    if not current_word:
+    word = dictation_manager.get_word()
+    if not word:
         return jsonify({'error': 'No current word'}), 404
     
-    return jsonify({
-        'id': current_word[0],
-        'word': current_word[1],
-        'bookId': current_word[2],
-        'tranCn': current_word[3],
-        'pos': current_word[4],
-        'usphone': current_word[5],
-        'ukphone': current_word[6],
-        'sContent': current_word[7],
-        'sCn': current_word[8]
-    }), 200
+    return jsonify({'word': word}), 200
 
 @app.route('/api/dictation_move_to_next_word', methods=['POST'])
 def dictation_move_to_next_word():
