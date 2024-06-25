@@ -65,7 +65,7 @@ mock.onPost('/api/files/upload').reply(() => {//backend
 });
 
 // 模拟获取用户词库学习进度的请求
-mock.onGet('/user/studyProgress').reply(config => {
+mock.onGet('/api/userSelectBook').reply(config => {//backend
   const token = config.headers.Authorization;
   if (token === 'Bearer mock-token') {
     const studyProgress = [
