@@ -20,7 +20,7 @@ const store = createStore({
       { id: 2, name: '词库2', progress: 50 },
       { id: 3, name: '词库3', progress: 30 }
     ],
-    currentWordList: { id: 2, name: '词库2' }, // 当前词库 ID
+    currentWordList: { id: 2, name: '词库b' }, // 当前词库 ID
     wordLists: [
       { id: 1, name: '词库a' },
       { id: 2, name: '词库b' },
