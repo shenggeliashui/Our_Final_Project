@@ -97,7 +97,7 @@ export default {
     // });
     const fetchStudyProgress = async () => {
       try {
-        const response = await api.get('/user/studyProgress', {
+        const response = await api.get('/api/userSelectBook', {//backend
           headers: {
             Authorization: `Bearer mock-token`
           }
