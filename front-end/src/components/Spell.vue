@@ -65,26 +65,33 @@ export default {
   },
   methods: {
     async RandomGetTenWords () {
+      console.log("ok");
       try {
         const response1 = await axios.get('http://127.0.0.1:5000/api/dictation_fetch_random_words')
-        while (this.num < 10) {
-          const response = await axios.get('http://127.0.0.1:5000/api/dictation_get_current_word')   //需要修改
-          const word = response.data.word
-          if (!this.words.includes(word)) {
-            this.words.push(word)
-            if (this.num === 0) {
-              this.word = this.words[0]
+        console.log(response1.data.message);
+        if (response1.data.message === 'Random words fetched successfully') {
+          
+          while (this.num < 10) {
+            console.log(this.num);
+            const response = await axios.get('http://127.0.0.1:5000/api/dictation_get_current_word')
+            const word = response.data.word
+            if (!this.words.includes(word)) {
+              this.words.push(word)
+              this.num += 1
             }
-            this.num += 1
+            await axios.get('http://127.0.0.1:5000/api/dictation_move_to_next_word')
           }
-          const response2 = await axios.get('http://127.0.0.1:5000/api/dictation_move_to_next_word')
+          this.word = this.words[this.index]
+          console.log(this.word)
+          await this.get_word_phonetic()
+          await this.get_word_meaning()
+          console.log(this.usphone)
         }
-        this.get_word_phonetic()
-        this.get_word_meaning()
       } catch (error) {
         console.error('Error calling API:', error)
       }
     },
+
 
     async NextButton () {
       this.index = this.actual_index
@@ -109,7 +116,7 @@ export default {
 
     async SubmitButton () {
       this.checkSpelling();
-      this.NextButton()
+  
     },
 
     async QuitButton () {
@@ -118,14 +125,16 @@ export default {
 
     async checkSpelling() {
       try {
-        const apiUrl = 'http://127.0.0.1:5000/api/dictation_is_word_match';
+        const apiUrl = `http://127.0.0.1:5000/api/dictation_is_word_match?current_word=${this.word}`;
         const response = await axios.post(apiUrl, { userInput: this.userInput });
-        
-        if (response.data.match) {
+        console.log(response.data.match);
+        if (response.data.match == true) {
+          // console.log("True");
           this.NextButton();
         } else {
+          // console.log("False");
           this.inputError = true;
-          this.correctWord = response.data.correct_word; // 可选：将正确的单词显示在页面上
+          // this.correctWord = response.data.correct_word; // 可选：将正确的单词显示在页面上
           setTimeout(() => {
             this.userInput = '';
             this.inputError = false;
@@ -138,14 +147,14 @@ export default {
 
     async get_word_phonetic () {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/dictation_get_phonetics', {
-          params: { word: this.words[this.index] }
-        })
-        this.usphone = response.data.usphone
-        this.ukphone = response.data.ukphone
-      } catch (error) {
-        console.error('Error calling API:', error)
-      }
+          const response = await axios.get('http://127.0.0.1:5001/api/get-word-phonetic', {
+            params: { word: this.words[this.index] }
+          });
+          this.usphone = response.data.usphone;
+          this.ukphone = response.data.ukphone;
+        } catch (error) {
+          console.error('Error calling API:', error);
+        }
     },
 
     async get_word_example () {
@@ -161,13 +170,13 @@ export default {
 
     async get_word_meaning () {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/dictation_get_pos_and_tran', {
-          params: { word: this.words[this.index] }
-        })
-        this.meaning = response.data.meaning
-      } catch (error) {
-        console.error('Error calling API:', error)
-      }
+          const response = await axios.get('http://127.0.0.1:5001/api/get-word-meaning', {
+            params: { word: this.words[this.index] }
+          });
+          this.meaning = response.data.meaning;
+        } catch (error) {
+          console.error('Error calling API:', error);
+        }
     }
   }
 }

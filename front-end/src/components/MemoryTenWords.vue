@@ -86,7 +86,7 @@
       },
       async DeleteUnmemoriedWord() {
         try {
-          await axios.post('http://127.0.0.1:5000/api/delete-unmemorized-word', {
+          await axios.post('http://127.0.0.1:5001/api/delete-unmemorized-word', {
             word: this.words[this.index]
           });
         } catch (error) {
@@ -95,7 +95,7 @@
       },
       async AddMemoriedWord() {
         try {
-          await axios.post('http://127.0.0.1:5000/api/add-memorized-word', {
+          await axios.post('http://127.0.0.1:5001/api/add-memorized-word', {
             word: this.words[this.index]
           });
         } catch (error) {
@@ -105,7 +105,7 @@
       async RandomGetTenWords() {
         try {
           while (this.num < 10) {
-            const response = await axios.get('http://127.0.0.1:5000/api/random-get-word-unmemorized');
+            const response = await axios.get('http://127.0.0.1:5001/api/random-get-word-unmemorized');
             const word = response.data.word;
             if (!this.words.includes(word)) {
               this.words.push(word);
@@ -122,7 +122,7 @@
       },
       async get_word_phonetic() {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/api/get-word-phonetic', {
+          const response = await axios.get('http://127.0.0.1:5001/api/get-word-phonetic', {
             params: { word: this.words[this.index] }
           });
           this.usphone = response.data.usphone;
@@ -133,7 +133,7 @@
       },
       async get_word_example() {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/api/get-word-example', {
+          const response = await axios.get('http://127.0.0.1:5001/api/get-word-example', {
             params: { word: this.words[this.index] }
           });
           this.example_sentence = response.data.example;
@@ -143,7 +143,7 @@
       },
       async get_word_meaning() {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/api/get-word-meaning', {
+          const response = await axios.get('http://127.0.0.1:5001/api/get-word-meaning', {
             params: { word: this.words[this.index] }
           });
           this.meaning = response.data.meaning;

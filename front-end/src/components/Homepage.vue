@@ -55,7 +55,7 @@
       },
       async getMemoriedNum() {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/api/get-memorized-num');
+          const response = await axios.get('http://127.0.0.1:5001/api/get-memorized-num');
           this.memoriedNum = response.data.number;
         } catch (error) {
           console.error('Error calling API:', error);
@@ -63,7 +63,7 @@
       },
       async getUnmemoriedNum() {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/api/get-unmemorized-num');
+          const response = await axios.get('http://127.0.0.1:5001/api/get-unmemorized-num');
           this.unmemoriedNum = response.data.number;
         } catch (error) {
           console.error('Error calling API:', error);
@@ -82,18 +82,22 @@
   }
   
   .word-stats {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 顶部对齐 */
+  margin-bottom: 10px;
+}
   
   .number {
-    font-size: 40px; /* 设置数字的字体大小 */
-  }
+  font-size: 36px;
+  color: #333;
+  font-weight: bold;
+}
   
   .chinese {
-    font-size: 20px; /* 设置中文的字体大小 */
-  }
+  font-size: 16px;
+  color: #666;
+}
   .stat {
     flex: 1;
     text-align: center;

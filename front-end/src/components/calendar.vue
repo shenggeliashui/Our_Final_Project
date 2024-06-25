@@ -85,7 +85,15 @@ export default {
           words: wordDataForDay ? wordDataForDay.words : 0,
           checked: wordDataForDay ? wordDataForDay.checked : true
         }
-        daysArray.push(day)
+        
+        if (this.currentYear < today.getFullYear() ||
+            (this.currentYear === today.getFullYear() && this.currentMonth < today.getMonth()) ||
+            (this.currentYear === today.getFullYear() && this.currentMonth === today.getMonth() && i <= today.getDate())){
+              this.updateWordsCount(day)
+            }else{
+              day.words=0;
+            }
+            daysArray.push(day)
       }
       return daysArray
     }
@@ -148,7 +156,7 @@ export default {
     },
     // This function can be customized to update words count based on your logic
     updateWordsCount (day) {
-      day.words = Math.floor(Math.random() * 7) // 0 to 3
+      day.words = Math.floor(Math.random() * 70) // 0 to 3
     }
   }
 }
