@@ -1,24 +1,23 @@
 # final_project
-项目源代码结构介绍：
-front-end为前端实现代码
-back-end为后端实现代码
+项目源代码结构介绍：  
+front-end为前端实现代码  
+back-end为后端实现代码  
 
 
-使用方法：
-在开始使用之前，先准备好数据库数据，进入sql文件夹，输入如下命令：
-mysql -u root -p < memorized_backup.sql mysql -u root -p < wordapp_backup.sql
-然后进入front-end，命令行处输入：
-	npm run serve
-然后进入back-end，命令行输入：
-	python run-all.py
-随后点击命令行打印出的网站：
-	App running at:
+# 使用方法：
+在开始使用之前，先准备好数据库数据，进入sql文件夹，输入如下命令：  
+```mysql -u root -p < memorized_backup.sql mysql -u root -p < wordapp_backup.sql```  
+然后进入front-end，命令行处输入：  
+	```npm run serve```  
+然后进入back-end，命令行输入：  
+	```python run-all.py```  
+随后点击命令行打印出的网站：  
+	```App running at:
 	  - Local:   http://localhost:8080/ 
-	  - Network: http://172.26.66.135:8080/
-任意进入一个网站即可使用
+	  - Network: http://172.26.66.135:8080/```  
+任意进入一个网站即可使用  
 
 
-> A Vue.js project
 
 ## 前端文件组成说明：
 ---src：源代码  
